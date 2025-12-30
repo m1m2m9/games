@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="Block Blast - увлекательная головоломка!">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Иконки для iOS -->
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72.png">
+    
+    <title>Block Blast</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Регистрация Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((reg) => console.log('SW registered:', reg))
+                    .catch((err) => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Фоновые частицы -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Главный контейнер -->
+    <div class="game-container">
+        
+        <!-- Главное меню -->
+        <div class="menu-screen" id="menuScreen">
+            <h1 class="game-title">BLOCK BLAST</h1>
+            <p class="game-subtitle">Заполняй линии, набирай очки!</p>
+            
+            <button class="menu-btn btn-play" id="btnPlay">
+                ▶ Играть
+            </button>
+            <button class="menu-btn btn-settings" id="btnSettings">
+                ⚙ Настройки
+            </button>
+            
+            <div class="high-score-display">
+                <div class="high-score-label">Лучший результат</div>
+                <div class="high-score-value" id="highScoreValue">0</div>
+            </div>
+        </div>
+
+        <!-- Игровой экран -->
+        <div class="game-screen" id="gameScreen">
+            <div class="game-header">
+                <button class="header-btn" id="btnPause">⏸</button>
+                
+                <div class="score-section">
+                    <div class="score-label">Счёт</div>
+                    <div class="score-value current" id="currentScore">0</div>
+                </div>
+                
+                <div class="score-section">
+                    <div class="score-label">Рекорд</div>
+                    <div class="score-value best" id="bestScore">0</div>
+                </div>
+                
+                <button class="header-btn" id="btnSound">🔊</button>
+            </div>
+
+            <div class="game-board" id="gameBoard"></div>
+
+            <div class="pieces-panel" id="piecesPanel"></div>
+        </div>
+    </div>
+
+    <!-- Ghost piece для перетаскивания -->
+    <div class="ghost-piece" id="ghostPiece"></div>
+
+    <!-- Модальное окно паузы -->
+    <div class="modal-overlay pause-modal" id="pauseModal">
+        <div class="modal">
+            <h2 class="modal-title">⏸ Пауза</h2>
+            <p class="modal-text">Игра приостановлена</p>
+            
+            <button class="modal-btn btn-restart" id="btnResume">▶ Продолжить</button>
+            <button class="modal-btn btn-menu" id="btnRestartPause">🔄 Заново</button>
+            <button class="modal-btn btn-menu" id="btnMenuPause">🏠 В меню</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно Game Over -->
+    <div class="modal-overlay gameover-modal" id="gameOverModal">
+        <div class="modal">
+            <h2 class="modal-title">Игра окончена!</h2>
+            <div class="modal-score" id="finalScore">0</div>
+            <p class="modal-text new-record" id="newRecord" style="display: none;">🎉 Новый рекорд!</p>
+            
+            <button class="modal-btn btn-restart" id="btnRestartOver">🔄 Играть снова</button>
+            <button class="modal-btn btn-menu" id="btnMenuOver">🏠 В меню</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек -->
+    <div class="modal-overlay settings-modal" id="settingsModal">
+        <div class="modal">
+            <h2 class="modal-title">⚙ Настройки</h2>
+            
+            <div class="setting-item">
+                <span class="setting-label">🔊 Звуки</span>
+                <div class="toggle active" id="toggleSound"></div>
+            </div>
+            
+            <div class="setting-item">
+                <span class="setting-label">📳 Вибрация</span>
+                <div class="toggle active" id="toggleVibration"></div>
+            </div>
+            
+            <button class="modal-btn btn-restart" id="btnCloseSettings" style="margin-top: 25px;">✓ Готово</button>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>
